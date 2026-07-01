@@ -13,8 +13,8 @@ export const Login: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] text-gray-100 px-4">
-            <div className="w-full max-w-md bg-[#161B26] border border-[#242C3D] p-8 rounded-2xl shadow-2xl">
+        <div className="min-h-screen flex items-center justify-center bg-[#050505] text-gray-100 px-4">
+            <div className="w-full max-w-md bg-[#121212] border border-[#4b320d] p-8 rounded-2xl shadow-2xl">
                 <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold tracking-tight text-white mb-2 font-sans">Northern Stars Team</h2>
                     <p className="text-sm text-gray-400">Sign in to book your interview slot</p>
@@ -28,7 +28,7 @@ export const Login: React.FC = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="name@example.com"
-                            className="w-full px-4 py-3 bg-[#0B0F19] border border-[#242C3D] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+                            className="w-full px-4 py-3 bg-[#0d0d0d] border border-[#242C3D] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-yellow-500 transition-colors"
                             required
                         />
                     </div>
@@ -40,7 +40,7 @@ export const Login: React.FC = () => {
                             value={userId}
                             onChange={(e) => setUserId(e.target.value)}
                             placeholder="NST-XXXX"
-                            className="w-full px-4 py-3 bg-[#0B0F19] border border-[#242C3D] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors text-center font-mono"
+                            className="w-full px-4 py-3 bg-[#0d0d0d] border border-[#242C3D] rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-yellow-500 transition-colors text-center font-mono"
                             required
                         />
                     </div>
