@@ -1,23 +1,20 @@
-// api/slots.js (الربط الفعلي والحقيقي مع جوجل شيت)
+// api/slots.js (النسخة الفعالة والمؤمنة للتعامل مع الـ 2 Sheets المنفصلين)
 
 export default async function handler(req, res) {
-    // تفعيل الـ CORS لتجنب أي مشاكل اتصال محلي أو خارجي
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
     const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
     const ADMIN_SECRET_PASSWORD = process.env.ADMIN_SECRET_PASSWORD || 'admin123';
 
     if (!GOOGLE_SCRIPT_URL) {
-        return res.status(500).json({ success: false, message: "Server misconfiguration: Script URL missing." });
+        return res.status(500).json({ success: false, message: "Server misconfiguration: GOOGLE_SCRIPT_URL missing." });
     }
 
-    // معاملة طلبات الـ GET (جلب المواعيد، وتشيك الطالب)
+    // 1. طلبات الـ GET
     if (req.method === 'GET') {
         const { action, email, userId } = req.query;
 
@@ -28,26 +25,31 @@ export default async function handler(req, res) {
         try {
             const response = await fetch(targetUrl);
             const data = await response.json();
+
+            // لو الـ Action كان تشيك مستخدم وطلع مش موجود، بنأكد إنه يرجع false صريحة
+            if (action === 'checkUser' && data.exists === false) {
+                return res.status(200).json({ exists: false });
+            }
+
             return res.status(200).json(data);
         } catch (error) {
-            return res.status(500).json({ success: false, message: "Failed to connect with Google Sheets API." });
+            return res.status(500).json({ success: false, message: "Google Script Connection Error" });
         }
     }
 
-    // معاملة طلبات الـ POST (الحجز، تسجيل دخول الأدمن، إضافة وحذف المواعيد)
+    // 2. طلبات الـ POST
     if (req.method === 'POST') {
         const body = req.body;
         const { action, password } = body;
 
-        // 1. تشيك دخول الأدمن على سيرفر فيرسيل مباشرة للأمان
+        // تشيك الأدمن مباشرة من Vercel
         if (action === 'adminLogin') {
             if (password === ADMIN_SECRET_PASSWORD) {
                 return res.status(200).json({ success: true });
             }
-            return res.status(401).json({ success: false, message: "Unauthorized Admin Password." });
+            return res.status(200).json({ success: false, message: "Invalid admin password." });
         }
 
-        // 2. تمرير باقي طلبات الـ POST (الحجز، الإضافة، الحذف) لجوجل شيت
         try {
             const response = await fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -57,7 +59,7 @@ export default async function handler(req, res) {
             const data = await response.json();
             return res.status(200).json(data);
         } catch (error) {
-            return res.status(500).json({ success: false, message: "Failed to execute write action on Google Sheets." });
+            return res.status(500).json({ success: false, message: "Google Script Execution Error" });
         }
     }
 }
