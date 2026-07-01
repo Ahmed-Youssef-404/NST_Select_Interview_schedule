@@ -116,7 +116,7 @@ export const AdminConsole: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {[slot.user1Details, slot.user2Details, slot.user3Details].map((user, index) => (
+                                        {[slot.user1Details, slot.user2Details].map((user, index) => (
                                             <div key={index} className="bg-[#050505] p-3 rounded-lg border border-zinc-900 min-h-[64px] flex flex-col justify-center">
                                                 {user ? (
                                                     <>

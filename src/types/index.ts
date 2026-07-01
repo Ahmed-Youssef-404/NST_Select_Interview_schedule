@@ -21,5 +21,5 @@ export interface UserStatus {
 export interface AdminSlotView extends Slot {
   user1Details?: { name: string; email: string } | null;
   user2Details?: { name: string; email: string } | null;
-  user3Details?: { name: string; email: string } | null;
+  // user3Details?: { name: string; email: string } | null;
 }
