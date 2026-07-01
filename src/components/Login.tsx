@@ -51,11 +51,9 @@ export const Login: React.FC = () => {
                         </div>
                     )}
 
-                    // جوة ملف Login.tsx، غير زرار الـ submit للون الذهبي:
                     <button
                         type="submit"
-                        // disabled={isLoading}
-                        disabled={true}
+                        disabled={isLoading}
                         className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 disabled:hover:bg-amber-500 disabled:opacity-30 text-black font-semibold rounded-xl transition-all duration-200 transform active:scale-[0.98] shadow-lg shadow-amber-500/5 disabled:cursor-not-allowed cursor-pointer"
                     >
                         {isLoading ? 'Verifying...' : 'Sign In'}
