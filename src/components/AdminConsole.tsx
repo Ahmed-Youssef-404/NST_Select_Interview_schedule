@@ -105,7 +105,7 @@ export const AdminConsole: React.FC = () => {
                             <p className="text-zinc-600 text-sm">No slots created yet.</p>
                         ) : (
                             (slots as AdminSlotView[]).map(slot => (
-                                <div key={slot.slotId} className="bg-[#121212] border border-zinc-900 rounded-xl p-5">
+                                <div key={slot.slotId} className="isolate bg-[#0a1119] border border-zinc-900 rounded-xl p-5">
                                     <div className="flex flex-col sm:flex-row justify-between border-b border-zinc-900 pb-3 mb-4 gap-2">
                                         <div>
                                             <span className="text-xs text-amber-500 font-bold">{slot.day}</span>
@@ -137,7 +137,7 @@ export const AdminConsole: React.FC = () => {
 
                 {/* TAB 2: PENDING STUDENTS (الجديد كلياً) */}
                 {activeTab === 'pending' && (
-                    <div className="bg-[#121212] border border-zinc-900 rounded-2xl p-6">
+                    <div className="isolate bg-[#0a1119] border border-zinc-900 rounded-2xl p-6">
                         <div className="mb-4">
                             <h3 className="text-sm font-bold text-white uppercase tracking-wider">Unscheduled Applicants</h3>
                             <p className="text-xs text-zinc-400 mt-1">The following students have verified profiles but haven't reserved any interview slots yet.</p>

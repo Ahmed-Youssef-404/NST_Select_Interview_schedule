@@ -13,7 +13,9 @@ const App: React.FC = () => {
       {isAdmin ? (
         <>
           <StarsBackground />
-          <AdminConsole />
+          <div>
+            <AdminConsole />
+          </div>
         </>
       ) : user ? (
         <Dashboard />
