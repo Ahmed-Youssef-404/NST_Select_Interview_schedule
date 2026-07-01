@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
-    const ADMIN_SECRET_PASSWORD = process.env.ADMIN_SECRET_PASSWORD || 'admin123';
+    const ADMIN_SECRET_PASSWORD = process.env.ADMIN_SECRET_PASSWORD;
 
     if (!GOOGLE_SCRIPT_URL) {
         return res.status(500).json({ success: false, message: "Server misconfiguration: GOOGLE_SCRIPT_URL missing." });

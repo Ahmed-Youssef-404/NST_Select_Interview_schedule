@@ -176,7 +176,7 @@ export const AdminConsole: React.FC = () => {
                                         {generateTimeSlots().map((time) => (<option key={time} value={time} className="bg-[#121212]">{time}</option>))}
                                     </select>
                                 </div>
-                                <button type="submit" disabled={isActionLoading} className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold rounded-lg cursor-pointer disabled:opacity-50 transition-colors">
+                                <button type="submit" disabled={isActionLoading} className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                                     {isActionLoading ? 'Creating Slot...' : 'Generate & Deploy Slot'}
                                 </button>
                             </form>
