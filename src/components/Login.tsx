@@ -47,14 +47,16 @@ export const Login: React.FC = () => {
 
                     {error && (
                         <div className="p-3 bg-red-950/40 border border-red-800/60 rounded-xl text-sm text-red-400 text-center">
-                            Invalid credentials or not registered in our database.
+                            Invalid credentials. Please try again.
                         </div>
                     )}
 
+                    // جوة ملف Login.tsx، غير زرار الـ submit للون الذهبي:
                     <button
                         type="submit"
-                        disabled={isLoading}
-                        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-medium rounded-xl transition-all duration-200 transform active:scale-[0.98] shadow-lg shadow-blue-600/20 disabled:cursor-not-allowed"
+                        // disabled={isLoading}
+                        disabled={true}
+                        className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 disabled:hover:bg-amber-500 disabled:opacity-30 text-black font-semibold rounded-xl transition-all duration-200 transform active:scale-[0.98] shadow-lg shadow-amber-500/5 disabled:cursor-not-allowed cursor-pointer"
                     >
                         {isLoading ? 'Verifying...' : 'Sign In'}
                     </button>
