@@ -193,7 +193,7 @@ export const Dashboard: React.FC = () => {
                                     {day}
                                 </h3>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {daySlots.map((slot) => {
                                         const isFull = isSlotFull(slot);
 

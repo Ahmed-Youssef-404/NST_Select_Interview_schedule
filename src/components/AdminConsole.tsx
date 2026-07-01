@@ -115,7 +115,7 @@ export const AdminConsole: React.FC = () => {
                                             Status: <span className={slot.status === 'Full' ? 'text-red-400 font-semibold' : 'text-green-400 font-semibold'}>{slot.status}</span>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {[slot.user1Details, slot.user2Details, slot.user3Details].map((user, index) => (
                                             <div key={index} className="bg-[#050505] p-3 rounded-lg border border-zinc-900 min-h-[64px] flex flex-col justify-center">
                                                 {user ? (
