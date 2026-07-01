@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useInterviewStore } from '../store/useInterviewStore';
 import type { Slot } from '@/types';
+import StarsBackground from '@/components/StarsBackground';
 
 export const Dashboard: React.FC = () => {
     const { user, slots, fetchSlots, bookInterviewSlot, isLoading, logout } = useInterviewStore();
@@ -77,6 +78,7 @@ export const Dashboard: React.FC = () => {
         const mySlot = slots.find(s => s.slotId === user.bookedSlotId);
         return (
             <div className="min-h-screen bg-[#050505] text-zinc-100 flex items-center justify-center p-4">
+                <StarsBackground />
                 <div className="w-full max-w-2xl bg-[#121212] border border-amber-500/20 p-8 rounded-2xl text-center shadow-2xl shadow-amber-500/5">
                     <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +110,7 @@ export const Dashboard: React.FC = () => {
     // 2. الشاشة الأساسية لاختيار المواعيد (Gold/Black UI)
     return (
         <div className="min-h-screen bg-[#050505] text-zinc-100 p-6 md:p-12 relative">
-
+            <StarsBackground />
             {/* Dynamic Toast System */}
             {toast && (
                 <div className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-2xl border text-sm max-w-md backdrop-blur-md transition-all duration-300 ${toast.type === 'success' ? 'bg-zinc-900 border-amber-500 text-amber-400' : 'bg-red-950/90 border-red-500 text-red-300'
@@ -212,8 +214,8 @@ export const Dashboard: React.FC = () => {
                                                     onClick={() => !isFull && setSelectedSlotId(slot.slotId)}
                                                     disabled={isFull || isLoading}
                                                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isFull
-                                                            ? 'bg-zinc-900 text-zinc-600 cursor-not-allowed'
-                                                            : 'bg-amber-500 hover:bg-amber-400 text-black active:scale-95 disabled:opacity-60 cursor-pointer shadow-md shadow-amber-500/5'
+                                                        ? 'bg-zinc-900 text-zinc-600 cursor-not-allowed'
+                                                        : 'bg-amber-500 hover:bg-amber-400 text-black active:scale-95 disabled:opacity-60 cursor-pointer shadow-md shadow-amber-500/5'
                                                         }`}
                                                 >
                                                     {isFull ? 'Full' : 'Select'}
