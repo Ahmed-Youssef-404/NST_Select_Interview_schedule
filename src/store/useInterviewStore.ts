@@ -30,11 +30,11 @@ export const useInterviewStore = create<InterviewState>((set, get) => ({
             if (data.exists) {
                 set({ user: data, isLoading: false });
             } else {
-                set({ error: 'بيانات الدخول غير صحيحة أو غير مسجلة بقاعدة البيانات.', isLoading: false });
+                set({ error: 'Invalid credentials. Please try again.', isLoading: false });
             }
             return data;
         } catch (err) {
-            set({ error: 'حدث خطأ أثناء الاتصال بالسيرفر.', isLoading: false });
+            set({ error: 'An error occurred while connecting to the server.', isLoading: false });
             return { exists: false };
         }
     },
@@ -57,7 +57,7 @@ export const useInterviewStore = create<InterviewState>((set, get) => ({
     bookInterviewSlot: async (slotId: string) => {
         const currentUser = get().user;
         if (!currentUser || !currentUser.userId || !currentUser.email) {
-            return { success: false, message: 'مستخدم غير معروف.' };
+            return { success: false, message: 'Invalid user.' };
         }
 
         set({ isLoading: true });
@@ -88,11 +88,11 @@ export const useInterviewStore = create<InterviewState>((set, get) => ({
                 set({ isLoading: false });
                 // لو السيرفر رفض (مثلاً الميعاد اتملى)، نحدث المواعيد فوراً عشان الـ UI يظهر الحقيقة
                 await get().fetchSlots();
-                return { success: false, message: data.message || 'عذراً، هذا الميعاد لم يعد متاحاً.' };
+                return { success: false, message: data.message || 'This slot is no longer available.' };
             }
         } catch (err) {
             set({ isLoading: false });
-            return { success: false, message: 'فشلت عملية الاتصال بالسيرفر للحجز.' };
+            return { success: false, message: 'Failed to book the slot.' };
         }
     },
 
