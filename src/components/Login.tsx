@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-[#050505] text-zinc-100 px-4">
-            <div className="w-full max-w-md bg-[#121212] border border-zinc-800 p-8 rounded-2xl shadow-2xl shadow-amber-500/5">
+            <div className="isolate w-full max-w-md bg-[#0f0e19] border border-zinc-800 p-8 rounded-2xl shadow-2xl shadow-amber-500/5">
                 <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Northern Stars Team</h2>
                     <p className="text-sm text-amber-500/80 font-medium">

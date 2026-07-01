@@ -20,7 +20,9 @@ const App: React.FC = () => {
       ) : (
         <>
           <StarsBackground />
-          <Login />
+          <div>
+            <Login />
+          </div>
         </>
       )}
     </div>

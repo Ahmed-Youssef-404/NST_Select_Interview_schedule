@@ -79,7 +79,7 @@ export const Dashboard: React.FC = () => {
         return (
             <div className="min-h-screen bg-[#050505] text-zinc-100 flex items-center justify-center p-4">
                 <StarsBackground />
-                <div className="w-full max-w-2xl bg-[#121212] border border-amber-500/20 p-8 rounded-2xl text-center shadow-2xl shadow-amber-500/5">
+                <div className="isolate w-full max-w-2xl bg-[#000709]/60 border border-amber-500/20 p-8 rounded-2xl text-center shadow-2xl shadow-amber-500/5">
                     <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -88,8 +88,15 @@ export const Dashboard: React.FC = () => {
                     <h1 className="text-2xl font-bold text-white mb-2 font-sans">Congratulations, {shortName}! 🎉</h1>
                     <p className="text-amber-500 font-medium text-sm mb-4">Your interview schedule is confirmed. We are excited to meet you!</p>
 
-                    <div className="bg-[#1a1a1a] border border-zinc-800 p-5 rounded-xl block max-w-sm mx-auto mb-6 text-sm text-zinc-400">
-                        💡 The meeting will be held <span className="text-white font-semibold">online via Discord</span>. The invitation link will be sent to you right before your interview time.
+                    <div className="text-start bg-[#310f0f] border border-zinc-800 p-5 rounded-xl block mx-auto mb-6 text-sm text-zinc-400">
+                        <div className="text-sm text-gray-300 space-y-2">
+                            <p>
+                                ⚡ Make sure your <strong>Discord</strong> account is active and working properly.
+                            </p>
+                            <p>
+                                If you run into any issues, just reach out to the person who contacted you.
+                            </p>
+                        </div>
                     </div>
 
                     {mySlot ? (
@@ -101,7 +108,7 @@ export const Dashboard: React.FC = () => {
                         <p className="text-amber-600 mb-8 text-sm">Loading your slot details...</p>
                     )}
 
-                    <button onClick={logout} className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-sm transition-all duration-200 cursor-pointer block mx-auto border border-zinc-700">Sign Out</button>
+                    {/* <button onClick={logout} className="px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-sm transition-all duration-200 cursor-pointer block mx-auto border border-zinc-700">Sign Out</button> */}
                 </div>
             </div>
         );
@@ -187,7 +194,7 @@ export const Dashboard: React.FC = () => {
                         <div className="text-center text-zinc-500 py-12">Loading schedule details...</div>
                     ) : (
                         Object.entries(groupedSlots).map(([day, daySlots]) => (
-                            <div key={day} className="bg-[#121212]/40 border border-zinc-900 p-6 rounded-2xl">
+                            <div key={day} className="isolate bg-[#000709] border border-zinc-800 p-6 rounded-2xl">
                                 <h3 className="text-sm font-bold text-amber-500 mb-4 flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                     {day}
