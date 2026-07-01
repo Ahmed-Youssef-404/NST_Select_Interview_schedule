@@ -1,45 +1,63 @@
-// api/slots.js
-export default async function handler(req, res) {
-    const SCRIPT_URL = process.env.APPS_SCRIPT_URL;
+// api/slots.js (الربط الفعلي والحقيقي مع جوجل شيت)
 
-    // إعداد الـ CORS headers لمنع أي مشاكل
-    res.setHeader('Access-Control-Allow-Credentials', true);
+export default async function handler(req, res) {
+    // تفعيل الـ CORS لتجنب أي مشاكل اتصال محلي أو خارجي
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    try {
-        // 1. التعامل مع طلب الـ GET (جلب المواعيد أو تشيك على يوزر)
-        if (req.method === 'GET') {
-            const { action, email, userId } = req.query;
+    const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
+    const ADMIN_SECRET_PASSWORD = process.env.ADMIN_SECRET_PASSWORD || 'admin123';
 
-            let targetUrl = `${SCRIPT_URL}?action=${action}`;
-            if (email && userId) {
-                targetUrl += `&email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
-            }
+    if (!GOOGLE_SCRIPT_URL) {
+        return res.status(500).json({ success: false, message: "Server misconfiguration: Script URL missing." });
+    }
 
+    // معاملة طلبات الـ GET (جلب المواعيد، وتشيك الطالب)
+    if (req.method === 'GET') {
+        const { action, email, userId } = req.query;
+
+        let targetUrl = `${GOOGLE_SCRIPT_URL}?action=${action}`;
+        if (email) targetUrl += `&email=${encodeURIComponent(email)}`;
+        if (userId) targetUrl += `&userId=${encodeURIComponent(userId)}`;
+
+        try {
             const response = await fetch(targetUrl);
             const data = await response.json();
             return res.status(200).json(data);
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Failed to connect with Google Sheets API." });
+        }
+    }
+
+    // معاملة طلبات الـ POST (الحجز، تسجيل دخول الأدمن، إضافة وحذف المواعيد)
+    if (req.method === 'POST') {
+        const body = req.body;
+        const { action, password } = body;
+
+        // 1. تشيك دخول الأدمن على سيرفر فيرسيل مباشرة للأمان
+        if (action === 'adminLogin') {
+            if (password === ADMIN_SECRET_PASSWORD) {
+                return res.status(200).json({ success: true });
+            }
+            return res.status(401).json({ success: false, message: "Unauthorized Admin Password." });
         }
 
-        // 2. التعامل مع طلب الـ POST (حجز ميعاد)
-        if (req.method === 'POST') {
-            const response = await fetch(SCRIPT_URL, {
+        // 2. تمرير باقي طلبات الـ POST (الحجز، الإضافة، الحذف) لجوجل شيت
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(req.body)
+                body: JSON.stringify(body)
             });
             const data = await response.json();
             return res.status(200).json(data);
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Failed to execute write action on Google Sheets." });
         }
-
-        return res.status(405).json({ error: 'Method not allowed' });
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
     }
 }

@@ -16,3 +16,10 @@ export interface UserStatus {
   hasBooked?: boolean;
   bookedSlotId?: string | null;
 }
+
+// الـ Type الجديد الخاص بصفحة الـ Admin لرؤية الطلاب ببياناتهم كاملة
+export interface AdminSlotView extends Slot {
+  user1Details?: { name: string; email: string } | null;
+  user2Details?: { name: string; email: string } | null;
+  user3Details?: { name: string; email: string } | null;
+}

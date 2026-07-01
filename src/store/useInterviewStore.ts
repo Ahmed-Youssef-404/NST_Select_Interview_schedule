@@ -1,100 +1,149 @@
-import type { Slot, UserStatus } from '@/types';
 import { create } from 'zustand';
+import type { Slot, UserStatus } from '@/types';
 
 interface InterviewState {
     user: UserStatus | null;
     slots: Slot[];
+    isAdmin: boolean; // هل المستخدم الحالي أدمن؟
     isLoading: boolean;
     error: string | null;
 
     // Actions
     checkUserAuth: (email: string, userId: string) => Promise<UserStatus>;
+    checkAdminAuth: (password: string) => Promise<boolean>; // دخول الأدمن
     fetchSlots: () => Promise<void>;
     bookInterviewSlot: (slotId: string) => Promise<{ success: boolean; message?: string }>;
+
+    // Admin Actions
+    addCustomSlot: (day: string, timeRange: string) => Promise<boolean>;
+    deleteCustomSlot: (slotId: string) => Promise<boolean>;
+
     logout: () => void;
 }
 
 export const useInterviewStore = create<InterviewState>((set, get) => ({
     user: null,
     slots: [],
+    isAdmin: false,
     isLoading: false,
     error: null,
 
-    // 1. التشيك على اليوزر أثناء الـ Login
     checkUserAuth: async (email: string, userId: string) => {
         set({ isLoading: true, error: null });
         try {
             const res = await fetch(`/api/slots?action=checkUser&email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`);
             const data: UserStatus = await res.json();
-
             if (data.exists) {
-                set({ user: data, isLoading: false });
+                set({ user: data, isAdmin: false, isLoading: false });
             } else {
-                set({ error: 'Invalid credentials. Please try again.', isLoading: false });
+                set({ error: 'Invalid credentials or not registered.', isLoading: false });
             }
             return data;
         } catch (err) {
-            set({ error: 'An error occurred while connecting to the server.', isLoading: false });
+            set({ error: 'Server connection error.', isLoading: false });
             return { exists: false };
         }
     },
 
-    // 2. جلب المواعيد (وهنستخدمها كمان في الـ Polling)
+    // تشيك الأدمن
+    checkAdminAuth: async (password: string) => {
+        set({ isLoading: true, error: null });
+        try {
+            const res = await fetch('/api/slots', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'adminLogin', password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                set({ isAdmin: true, user: null, isLoading: false });
+                return true;
+            } else {
+                set({ error: 'Incorrect Admin Password.', isLoading: false });
+                return false;
+            }
+        } catch (err) {
+            set({ error: 'Server connection error.', isLoading: false });
+            return false;
+        }
+    },
+
     fetchSlots: async () => {
-        // مش هنحط الـ isLoading بـ true هنا عشان الـ Polling ميعملش جليتش في الـ UI
         try {
             const res = await fetch('/api/slots?action=getSlots');
             const data = await res.json();
-            if (data.slots) {
-                set({ slots: data.slots });
-            }
+            if (data.slots) set({ slots: data.slots });
         } catch (err) {
             console.error('Error fetching slots:', err);
         }
     },
 
-    // 3. حجز ميعاد (مع الـ Double Check والـ Race Condition Handling)
     bookInterviewSlot: async (slotId: string) => {
         const currentUser = get().user;
-        if (!currentUser || !currentUser.userId || !currentUser.email) {
-            return { success: false, message: 'Invalid user.' };
-        }
-
+        if (!currentUser?.userId) return { success: false, message: 'Unknown user.' };
         set({ isLoading: true });
         try {
             const res = await fetch('/api/slots', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'bookSlot',
-                    slotId,
-                    userId: currentUser.userId,
-                    email: currentUser.email
-                })
+                body: JSON.stringify({ action: 'bookSlot', slotId, userId: currentUser.userId, email: currentUser.email })
             });
-
             const data = await res.json();
-
             if (data.success) {
-                // تحديث الـ User State محلياً عشان الـ UI يتنقل لصفحة "تم الحجز"
                 set((state) => ({
                     user: state.user ? { ...state.user, hasBooked: true, bookedSlotId: slotId } : null,
                     isLoading: false
                 }));
-                // تحديث المواعيد فوراً
                 await get().fetchSlots();
                 return { success: true };
             } else {
                 set({ isLoading: false });
-                // لو السيرفر رفض (مثلاً الميعاد اتملى)، نحدث المواعيد فوراً عشان الـ UI يظهر الحقيقة
                 await get().fetchSlots();
-                return { success: false, message: data.message || 'This slot is no longer available.' };
+                return { success: false, message: data.message };
             }
         } catch (err) {
             set({ isLoading: false });
-            return { success: false, message: 'Failed to book the slot.' };
+            return { success: false, message: 'Connection error.' };
         }
     },
 
-    logout: () => set({ user: null, error: null })
+    // أدمن: إضافة ميعاد
+    addCustomSlot: async (day: string, timeRange: string) => {
+        try {
+            const res = await fetch('/api/slots', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'addSlot', day, timeRange })
+            });
+            const data = await res.json();
+            if (data.success) {
+                await get().fetchSlots();
+                return true;
+            }
+            return false;
+        } catch (err) {
+            return false;
+        }
+    },
+
+    // أدمن: حذف ميعاد
+    deleteCustomSlot: async (slotId: string) => {
+        try {
+            const res = await fetch('/api/slots', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'deleteSlot', slotId })
+            });
+            const data = await res.json();
+            if (data.success) {
+                await get().fetchSlots();
+                return true;
+            }
+            return false;
+        } catch (err) {
+            return false;
+        }
+    },
+
+    logout: () => set({ user: null, isAdmin: false, error: null })
 }));
