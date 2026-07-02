@@ -85,7 +85,7 @@ export const Dashboard: React.FC = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                    <h1 className="text-2xl font-bold text-white mb-2 font-sans">Congratulations, {shortName}! 🎉</h1>
+                    <h1 className="text-2xl font-bold text-white mb-2 font-sans">Welcome, {shortName}!</h1>
                     <p className="text-amber-500 font-medium text-sm mb-4">Your interview schedule is confirmed. We are excited to meet you!</p>
 
                     <div className="text-start bg-[#310f0f] border border-zinc-800 p-5 rounded-xl block mx-auto mb-6 text-sm text-zinc-400">
@@ -173,12 +173,13 @@ export const Dashboard: React.FC = () => {
                 {/* Shortened Welcome Message Section with Discord Note */}
                 <div className="bg-gradient-to-r from-[#121212] to-[#1a1a1a] border border-amber-500/20 p-6 rounded-2xl mb-10 shadow-xl relative overflow-hidden">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">NST Admission</span>
-                    <h1 className="text-2xl font-extrabold text-white mt-3 mb-1">Congratulations, {shortName}! 🎉</h1>
+                    <h1 className="text-2xl font-extrabold text-white mt-3 mb-1">Welcome, Omar Youssef!</h1>
+                    <span className="text-base font-bold text-white mb-2 font-sans">Congratulations again 🎉</span>
                     <p className="text-zinc-300 leading-relaxed text-sm mb-3">
                         We are happy to have you with us and wish you the best of luck! Please select your interview time slot now.
                     </p>
                     <p className="text-xs text-amber-500/90 font-medium bg-amber-500/5 border border-amber-500/10 p-3 rounded-xl inline-block">
-                        📢 <span className="font-bold">Note:</span> The meeting will be held <span className="text-white font-semibold">online via Discord</span>. The link will be sent to you before your scheduled time.
+                        📢 <span className="font-bold">Note:</span> The interview will be held <span className="text-white font-semibold">online via Discord</span>. The link will be sent to you before your scheduled time.
                     </p>
                 </div>
 
